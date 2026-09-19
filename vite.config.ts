@@ -2,8 +2,17 @@ import { defineConfig, type HtmlTagDescriptor, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'node:path'
+import { createRequire } from 'node:module'
 
-import siteConfiguration from './.figma/make/site.json'
+// .figma/make/site.json is only present in the Figma Make environment.
+// Fall back to an empty config so production builds (e.g. Vercel) still work.
+const _require = createRequire(import.meta.url)
+let siteConfiguration: Record<string, unknown> = {}
+try {
+  siteConfiguration = _require('./.figma/make/site.json')
+} catch {
+  // file absent outside Figma Make — use defaults
+}
 
 // Vite config — https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {

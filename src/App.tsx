@@ -181,6 +181,7 @@ function CoverPage({ isMobile }: { isMobile?: boolean }) {
         borderRadius: 12, padding: isMobile ? '24px 38px' : '22px 36px',
         textAlign: 'center', zIndex: 5,
         boxShadow: '0 6px 32px rgba(0,0,0,0.5)',
+      }}>
         <div style={{ fontFamily: 'Playfair Display, serif', fontSize: isMobile ? 38 : 30, fontWeight: 700, color: '#2D0008', lineHeight: 1.1 }}>
           Our Story
         </div>

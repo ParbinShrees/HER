@@ -1312,7 +1312,7 @@ function LetterPage({
         {/* Letter body */}
         <div style={{ position: 'relative', flex: 1, overflow: 'hidden' }}>
           <p style={{ fontFamily: 'Playfair Display, serif', fontStyle: 'italic', fontSize: isMobile ? 13.5 : 11.5, lineHeight: 1.85, color: '#3D2010' }}>
-            It's only been a few months since we started loving each other, but having you in my life changed everything.
+            It's only been a few days since we started loving each other, but having you in my life changed everything.
             Thank you for making me smile every day and understanding me like nobody else does.
             I'm really lucky to have you, and I want to stay by your side always.
           </p>
@@ -1396,7 +1396,7 @@ function NotePopup({ onClose }: { onClose: () => void }) {
 
         <div style={{ fontFamily: 'Playfair Display, serif', fontStyle: 'italic', fontSize: 15, lineHeight: 1.9, color: '#2D1A10' }}>
           <p style={{ marginBottom: 16 }}>
-            I wanted to keep this real and from my heart. It's only been a few months since we started loving each other, so I don't want to write fake long essays or talk about old memories.
+            I wanted to keep this real and from my heart. It's only been a few days since we started loving each other, so I don't want to write fake long essays or talk about old memories.
           </p>
           <p style={{ marginBottom: 16 }}>
             Maya bashnu raixa ka ho ka bata khojna puge, samjheko ta pailai thiye tara aaile paye tmelai. Yeti dherai samaye paxi veteko xu, I really don't wanna loose you.

@@ -85,6 +85,21 @@ button {
   to   { transform: translateY(0); }
 }
 
+@keyframes eqBar {
+  0%, 100% { transform: scaleY(0.25); }
+  50%      { transform: scaleY(1); }
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes musicGlow {
+  0%, 100% { box-shadow: 0 4px 14px rgba(201,168,76,0.35); }
+  50%      { box-shadow: 0 6px 24px rgba(201,168,76,0.7); }
+}
+
 /* ── Safe areas (iPhone notch / home indicator) ─── */
 
 .safe-bottom {

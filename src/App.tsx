@@ -11,6 +11,7 @@ import couplePhoto from './assets/ref9.jpg'
 import gardenPhoto from './assets/ref10.jpg'
 import candleVideo from './imports/istockphoto-1355977124-640_adpp_is.mp4'
 import filmStripImage from './imports/image.png'
+import timilaiMusic from './assets/timilai.mp3'
 
 // ── Constants ────────────────────────────────────────────
 
@@ -121,41 +122,216 @@ function FloatingHearts() {
   )
 }
 
-// ── Audio Pill ───────────────────────────────────────────
+// ── Audio Player Components ───────────────────────────────
 
-function AudioPill({ compact }: { compact?: boolean }) {
-  const bars = [5, 10, 14, 18, 12, 20, 16, 10, 7, 14, 18, 11, 8, 15, 13, 9]
+function formatAudioTime(sec: number) {
+  if (!sec || isNaN(sec)) return '0:00'
+  const m = Math.floor(sec / 60)
+  const s = Math.floor(sec % 60)
+  return `${m}:${s < 10 ? '0' : ''}${s}`
+}
+
+function FloatingMusicButton({
+  isPlaying,
+  onToggle,
+  isMobile,
+}: {
+  isPlaying: boolean
+  onToggle: () => void
+  isMobile?: boolean
+}) {
   return (
-    <div style={{
-      display: 'flex', alignItems: 'center', gap: compact ? 6 : 8,
-      background: '#FFFDF5', border: '1.5px solid #C9A84C',
-      borderRadius: 999, padding: compact ? '5px 10px' : '7px 14px',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-    }}>
+    <button
+      onClick={onToggle}
+      aria-label={isPlaying ? 'Pause music' : 'Play music'}
+      style={{
+        position: 'fixed',
+        top: 'calc(14px + env(safe-area-inset-top, 0px))',
+        right: isMobile ? 12 : 24,
+        zIndex: 110,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+        background: isPlaying
+          ? 'linear-gradient(135deg, rgba(64, 14, 26, 0.94) 0%, rgba(107, 39, 55, 0.94) 100%)'
+          : 'linear-gradient(135deg, rgba(255, 253, 248, 0.94) 0%, rgba(247, 234, 215, 0.94) 100%)',
+        color: isPlaying ? '#F5DEB3' : '#6B2737',
+        border: '1.5px solid rgba(201, 168, 76, 0.65)',
+        borderRadius: 999,
+        padding: isMobile ? '6px 12px' : '7px 16px',
+        boxShadow: isPlaying
+          ? '0 6px 20px rgba(107, 39, 55, 0.35), 0 2px 8px rgba(0,0,0,0.15)'
+          : '0 4px 16px rgba(0, 0, 0, 0.12)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        cursor: 'pointer',
+        transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+        animation: isPlaying ? 'none' : 'musicGlow 2.5s infinite ease-in-out',
+      }}
+    >
+      {/* Vinyl Disc Icon */}
       <div style={{
-        width: compact ? 22 : 26, height: compact ? 22 : 26, borderRadius: '50%',
-        background: '#6B2737',
+        width: isMobile ? 22 : 24,
+        height: isMobile ? 22 : 24,
+        borderRadius: '50%',
+        background: isPlaying
+          ? 'radial-gradient(circle, #E8C97B 25%, #222 26%, #111 60%, #333 100%)'
+          : 'radial-gradient(circle, #C9A84C 25%, #6B2737 26%, #4A0E1C 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        animation: isPlaying ? 'spinSlow 4s linear infinite' : 'none',
+        flexShrink: 0,
+        boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+      }}>
+        <div style={{
+          width: 6, height: 6, borderRadius: '50%', background: '#FFF',
+        }}/>
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+        <span style={{
+          fontFamily: 'Lato, sans-serif',
+          fontSize: isMobile ? 11 : 12,
+          fontWeight: 700,
+          letterSpacing: 0.4,
+          whiteSpace: 'nowrap',
+        }}>
+          {isPlaying ? 'Timilai ♪' : 'Play Song ♪'}
+        </span>
+
+        {/* Small equalizer visualizer */}
+        {isPlaying && (
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 1.5, height: 12, marginLeft: 2 }}>
+            {[8, 12, 6, 14].map((h, i) => (
+              <div
+                key={i}
+                style={{
+                  width: 2, height: h,
+                  borderRadius: 1,
+                  background: '#F5DEB3',
+                  transformOrigin: 'bottom',
+                  animation: `eqBar ${0.5 + i * 0.15}s ease-in-out infinite`,
+                }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </button>
+  )
+}
+
+function AudioPill({
+  compact,
+  isPlaying,
+  onToggle,
+  currentTime = 0,
+  duration = 0,
+}: {
+  compact?: boolean
+  isPlaying?: boolean
+  onToggle?: () => void
+  currentTime?: number
+  duration?: number
+}) {
+  const bars = [5, 10, 14, 18, 12, 20, 16, 10, 7, 14, 18, 11, 8, 15, 13, 9]
+
+  return (
+    <div
+      onClick={onToggle}
+      role="button"
+      tabIndex={0}
+      title={isPlaying ? 'Pause music' : 'Play Timilai - Purna Rai'}
+      style={{
+        display: 'flex', alignItems: 'center', gap: compact ? 7 : 9,
+        background: 'linear-gradient(135deg, #FFFDF8 0%, #FAF2E4 100%)',
+        border: '1.5px solid #C9A84C',
+        borderRadius: 999, padding: compact ? '6px 12px' : '8px 16px',
+        boxShadow: isPlaying
+          ? '0 4px 16px rgba(201,168,76,0.35), 0 2px 8px rgba(107,39,55,0.15)'
+          : '0 2px 8px rgba(0,0,0,0.08)',
+        cursor: 'pointer',
+        transition: 'all 0.25s ease',
+        userSelect: 'none',
+      }}
+    >
+      <div style={{
+        width: compact ? 24 : 28, height: compact ? 24 : 28, borderRadius: '50%',
+        background: 'linear-gradient(135deg, #6B2737 0%, #8A2D40 100%)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         flexShrink: 0,
+        boxShadow: '0 2px 6px rgba(107,39,55,0.3)',
       }}>
-        <svg width="10" height="12" viewBox="0 0 10 12" fill="white"><path d="M1 1L9 6L1 11V1Z"/></svg>
+        {isPlaying ? (
+          <svg width="10" height="12" viewBox="0 0 10 12" fill="white">
+            <rect x="1" y="1" width="3" height="10" rx="1" />
+            <rect x="6" y="1" width="3" height="10" rx="1" />
+          </svg>
+        ) : (
+          <svg width="10" height="12" viewBox="0 0 10 12" fill="white" style={{ marginLeft: 1 }}>
+            <path d="M1 1L9 6L1 11V1Z" />
+          </svg>
+        )}
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 2, height: 20 }}>
-        {bars.map((h, i) => (
-          <div key={i} style={{
-            width: 2.5, height: h * (compact ? 0.8 : 1), borderRadius: 2,
-            background: i < 9 ? '#6B2737' : '#D4A0A8',
-          }}/>
-        ))}
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: compact ? 4 : 6 }}>
+          <span style={{
+            fontFamily: 'Lato, sans-serif', fontSize: compact ? 9.5 : 10.5,
+            fontWeight: 700, color: '#3A0C16', letterSpacing: 0.3,
+          }}>
+            Timilai
+          </span>
+          <span style={{ fontSize: 9, color: '#9E7448', fontFamily: 'Lato, sans-serif' }}>
+            • Purna Rai
+          </span>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 2, height: 16 }}>
+          {bars.map((h, i) => (
+            <div
+              key={i}
+              style={{
+                width: 2.5,
+                height: h * (compact ? 0.7 : 0.85),
+                borderRadius: 2,
+                background: isPlaying ? '#6B2737' : '#D4A080',
+                transformOrigin: 'bottom',
+                animation: isPlaying ? `eqBar ${0.6 + ((i * 0.13) % 0.8)}s ease-in-out infinite` : 'none',
+                animationDelay: `${(i * 0.07) % 0.5}s`,
+                transition: 'background 0.3s ease',
+              }}
+            />
+          ))}
+        </div>
       </div>
-      <span style={{ fontSize: 10, color: '#999', fontFamily: 'Lato, sans-serif', flexShrink: 0 }}>0:32</span>
+
+      <span style={{
+        fontSize: compact ? 9 : 10,
+        color: '#8B5E3C',
+        fontFamily: 'Lato, sans-serif',
+        flexShrink: 0,
+        fontWeight: 600,
+        marginLeft: 2,
+      }}>
+        {formatAudioTime(currentTime)}
+      </span>
     </div>
   )
 }
 
 // ── Page Components ───────────────────────────────────────
 
-function CoverPage({ isMobile }: { isMobile?: boolean }) {
+function CoverPage({
+  isMobile,
+  onStart,
+  isPlaying,
+}: {
+  isMobile?: boolean
+  onStart?: () => void
+  isPlaying?: boolean
+}) {
   return (
     <div style={{
       width: '100%', height: '100%',
@@ -183,12 +359,12 @@ function CoverPage({ isMobile }: { isMobile?: boolean }) {
         boxShadow: '0 6px 32px rgba(0,0,0,0.5)',
       }}>
         <div style={{ fontFamily: 'Playfair Display, serif', fontSize: isMobile ? 38 : 30, fontWeight: 700, color: '#2D0008', lineHeight: 1.1 }}>
-          Our Story
+          Hamro Maya
         </div>
         <div style={{ width: 50, height: 1, background: '#9A7040', margin: '12px auto 8px' }}/>
         <div style={{ fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 24 : 18, color: '#6B2737' }}>♥</div>
         <div style={{ fontFamily: 'Playfair Display, serif', fontStyle: 'italic', fontSize: isMobile ? 12 : 10, letterSpacing: 2, color: '#7A4E28', textTransform: 'uppercase', marginTop: 4 }}>
-          A Love Story
+          Our Story
         </div>
       </div>
 
@@ -211,7 +387,7 @@ function CoverPage({ isMobile }: { isMobile?: boolean }) {
 
       {/* Swipe hint on mobile */}
       {isMobile && (
-        <div style={{
+        <div onClick={onStart} style={{ cursor: 'pointer',
           position: 'absolute', bottom: 36, left: 0, right: 0,
           textAlign: 'center', zIndex: 10,
           color: 'rgba(245,222,179,0.7)',
@@ -276,13 +452,7 @@ function IntroCandlePage({ onNext, onPrev, isMobile }: { onNext: () => void; onP
           fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 26 : 22,
           fontWeight: 700, color: '#4A0E1C', lineHeight: 1.15,
         }}>
-          To My Favorite Person
-        </div>
-        <div style={{
-          fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
-          fontSize: isMobile ? 12 : 10, color: '#7D4F38', marginTop: 3,
-        }}>
-          the one who makes my whole world bloom
+          Hamro Maya
         </div>
       </div>
 
@@ -312,22 +482,22 @@ function IntroCandlePage({ onNext, onPrev, isMobile }: { onNext: () => void; onP
         <div style={{
           position: 'absolute', inset: 0,
           display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-          padding: '16px 16px', textAlign: 'center',
-          background: 'radial-gradient(ellipse at center, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.22) 65%, transparent 100%)',
+          padding: isMobile ? '16px 20px' : '14px 16px', textAlign: 'center',
+          background: 'radial-gradient(ellipse at center, rgba(255,255,255,0.78) 0%, rgba(255,255,255,0.25) 70%, transparent 100%)',
         }}>
-          <div style={{ fontSize: 16, color: '#A3384D', marginBottom: 2 }}>♥</div>
+          <div style={{ fontSize: 16, color: '#A3384D', marginBottom: 6 }}>♥</div>
           <div style={{
             fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
-            fontSize: isMobile ? 13 : 11, lineHeight: 1.55,
+            fontSize: isMobile ? 13 : 11, lineHeight: 1.6,
             color: '#38161E', fontWeight: 600,
           }}>
-            "You walked into my life, and suddenly every love song made sense."
+            "Maya bashnu raixa ka ho ka bata khojna puge, samjheko ta pailai thiye tara aaile paye tmelai."
           </div>
           <div style={{
-            fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 15 : 12,
-            color: '#822B3E', marginTop: 4,
+            fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 15 : 12.5,
+            color: '#822B3E', marginTop: 8,
           }}>
-            — forever & always
+            yeti dherai samaye paxi veteko xu, i don't wanna loose you ♥
           </div>
         </div>
       </div>
@@ -340,9 +510,9 @@ function IntroCandlePage({ onNext, onPrev, isMobile }: { onNext: () => void; onP
         <div style={{ width: 44, height: 1, background: '#C9A84C', margin: '0 auto 6px', opacity: 0.6 }}/>
         <div style={{
           fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
-          fontSize: isMobile ? 12.5 : 10.5, color: '#5A2A35', lineHeight: 1.45,
+          fontSize: isMobile ? 12 : 10, color: '#5A2A35', lineHeight: 1.45,
         }}>
-          Every love story is beautiful, but ours is my absolute favorite.
+          sadhai vari tmelai dherai maya ♥
         </div>
       </div>
 
@@ -392,13 +562,13 @@ function SpreadBLeftPage({ isMobile }: { isMobile?: boolean }) {
           letterSpacing: 2, textTransform: 'uppercase', color: '#6B2737',
           marginBottom: 3,
         }}>
-          ♥ The Beginning of Us ♥
+          ♥ Timro Sath ♥
         </div>
         <div style={{
           fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 26 : 20,
           fontWeight: 700, color: '#3A0C16',
         }}>
-          When My World Changed
+          You & Me
         </div>
       </div>
 
@@ -456,7 +626,7 @@ function SpreadBLeftPage({ isMobile }: { isMobile?: boolean }) {
             fontSize: isMobile ? 13 : 10.5,
             color: '#6B2737',
           }}>
-            My prettiest view ♥
+            sadhai tmelai maya ♥
           </span>
         </div>
       </div>
@@ -476,7 +646,7 @@ function SpreadBLeftPage({ isMobile }: { isMobile?: boolean }) {
           borderBottom: '1px dashed #D4A080', paddingBottom: 5, marginBottom: 6,
         }}>
           <span style={{ fontFamily: 'Lato, sans-serif', fontSize: isMobile ? 8 : 7.5, letterSpacing: 1.5, textTransform: 'uppercase', color: '#8B5E3C' }}>
-            Official Promise
+            Promise
           </span>
           <span style={{ fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 14 : 12.5, color: '#6B2737', fontWeight: 700 }}>
             You & Me
@@ -489,15 +659,15 @@ function SpreadBLeftPage({ isMobile }: { isMobile?: boolean }) {
           </div>
           <div>
             <div style={{ fontFamily: 'Lato, sans-serif', fontSize: 7, color: '#9C7252', textTransform: 'uppercase', letterSpacing: 1 }}>My Heart</div>
-            <div style={{ fontFamily: 'Playfair Display, serif', fontSize: isMobile ? 11.5 : 9.5, fontWeight: 700, color: '#6B2737' }}>100% Yours</div>
+            <div style={{ fontFamily: 'Playfair Display, serif', fontSize: isMobile ? 11.5 : 9.5, fontWeight: 700, color: '#6B2737' }}>Only Yours</div>
           </div>
           <div>
             <div style={{ fontFamily: 'Lato, sans-serif', fontSize: 7, color: '#9C7252', textTransform: 'uppercase', letterSpacing: 1 }}>Fav Place</div>
-            <div style={{ fontFamily: 'Playfair Display, serif', fontSize: isMobile ? 11.5 : 9.5, fontWeight: 700, color: '#2B1218' }}>By Your Side</div>
+            <div style={{ fontFamily: 'Playfair Display, serif', fontSize: isMobile ? 11.5 : 9.5, fontWeight: 700, color: '#2B1218' }}>With You</div>
           </div>
           <div>
             <div style={{ fontFamily: 'Lato, sans-serif', fontSize: 7, color: '#9C7252', textTransform: 'uppercase', letterSpacing: 1 }}>Status</div>
-            <div style={{ fontFamily: 'Playfair Display, serif', fontSize: isMobile ? 11.5 : 9.5, fontWeight: 700, color: '#6B2737' }}>Deep In Love ♥</div>
+            <div style={{ fontFamily: 'Playfair Display, serif', fontSize: isMobile ? 11.5 : 9.5, fontWeight: 700, color: '#6B2737' }}>Always Yours ♥</div>
           </div>
         </div>
       </div>
@@ -505,13 +675,13 @@ function SpreadBLeftPage({ isMobile }: { isMobile?: boolean }) {
       {/* Romantic Footer Note */}
       <div style={{
         zIndex: 4, textAlign: 'center',
-        padding: '2px 8px', maxWidth: isMobile ? 290 : 210,
+        padding: '2px 8px', maxWidth: isMobile ? 295 : 215,
       }}>
         <div style={{
           fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
-          fontSize: isMobile ? 12.5 : 10, color: '#663B2B', lineHeight: 1.5,
+          fontSize: isMobile ? 12.5 : 10.5, color: '#5A1A26', lineHeight: 1.55, fontWeight: 600,
         }}>
-          "I loved you yesterday, I love you still, I always have, I always will."
+          "Mero bihan pani tme mero aandhakar ko sathiii ni tme, na janu la xodi kaile pani ma tmelai sadhai maya garney xu."
         </div>
       </div>
 
@@ -554,13 +724,13 @@ function PhotoSmilePage({ isMobile }: { isMobile?: boolean }) {
           letterSpacing: 2, textTransform: 'uppercase', color: '#9E6454',
           marginBottom: 3,
         }}>
-          ✦ Chapter II • Pure Joy ✦
+          ♥ Her Smile ♥
         </div>
         <div style={{
           fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 26 : 20,
           fontWeight: 700, color: '#4A0E1C',
         }}>
-          That Precious Smile
+          That Smile
         </div>
       </div>
 
@@ -603,7 +773,7 @@ function PhotoSmilePage({ isMobile }: { isMobile?: boolean }) {
           fontSize: isMobile ? 14 : 11,
           color: '#6B2737',
         }}>
-          my favorite sight in the world ♥
+          always smiling like this ♥
         </div>
       </div>
 
@@ -623,7 +793,7 @@ function PhotoSmilePage({ isMobile }: { isMobile?: boolean }) {
           fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
           fontSize: isMobile ? 12.5 : 10, lineHeight: 1.55, color: '#3A151D',
         }}>
-          "Every time you smile, my entire world pauses. Your playful laughter and sweet silly faces make every ordinary moment feel completely magical."
+          "Honestly, your smile and silly laughs just make everything so much better. Never stop laughing like this."
         </div>
       </div>
 
@@ -666,13 +836,13 @@ function PhotoPrayerPage({ isMobile }: { isMobile?: boolean }) {
           letterSpacing: 2, textTransform: 'uppercase', color: '#8F663F',
           marginBottom: 3,
         }}>
-          ✦ Chapter III • Sacred Winds ✦
+          ♥ Peaceful Moments ♥
         </div>
         <div style={{
           fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 26 : 20,
           fontWeight: 700, color: '#421620',
         }}>
-          Grace Under Prayer Flags
+          Peace & Quiet
         </div>
       </div>
 
@@ -713,7 +883,7 @@ function PhotoPrayerPage({ isMobile }: { isMobile?: boolean }) {
           fontSize: isMobile ? 14 : 11,
           color: '#6B2737',
         }}>
-          an answered prayer, always ♥
+          one of my favorites ♥
         </div>
       </div>
 
@@ -733,7 +903,7 @@ function PhotoPrayerPage({ isMobile }: { isMobile?: boolean }) {
           fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
           fontSize: isMobile ? 12.5 : 10, lineHeight: 1.55, color: '#3A151D',
         }}>
-          "Standing gracefully where prayers meet the mountain breeze. You carry peace and light everywhere you go, and in every prayer, I thank the heavens for you."
+          "Such a calm and pretty picture of you. Just really grateful that you're in my life."
         </div>
       </div>
 
@@ -776,13 +946,13 @@ function PhotoGardenPage({ isMobile }: { isMobile?: boolean }) {
           letterSpacing: 2, textTransform: 'uppercase', color: '#7A6B48',
           marginBottom: 3,
         }}>
-          ✦ Chapter IV • Quiet Peace ✦
+          ♥ Quiet Days ♥
         </div>
         <div style={{
           fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 26 : 20,
           fontWeight: 700, color: '#3A2012',
         }}>
-          Peaceful Afternoons
+          Just Us
         </div>
       </div>
 
@@ -825,7 +995,7 @@ function PhotoGardenPage({ isMobile }: { isMobile?: boolean }) {
           fontSize: isMobile ? 14 : 11,
           color: '#6B2737',
         }}>
-          my calm in every storm ♥
+          peaceful moments ♥
         </div>
       </div>
 
@@ -845,7 +1015,7 @@ function PhotoGardenPage({ isMobile }: { isMobile?: boolean }) {
           fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
           fontSize: isMobile ? 12.5 : 10, lineHeight: 1.55, color: '#3A151D',
         }}>
-          "Sitting beside you by the water, listening to the soft sounds of the garden. It’s in these quiet moments that I realize just how deeply you became my home."
+          "Quiet days with you are the best. Just being around you is enough for me."
         </div>
       </div>
 
@@ -888,13 +1058,13 @@ function PhotoSkyPage({ isMobile }: { isMobile?: boolean }) {
           letterSpacing: 2, textTransform: 'uppercase', color: '#9E7448',
           marginBottom: 3,
         }}>
-          ✦ Chapter V • Golden Moments ✦
+          ♥ Open Sky ♥
         </div>
         <div style={{
           fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 26 : 20,
           fontWeight: 700, color: '#4A0E1C',
         }}>
-          Under The Endless Sky
+          Side By Side
         </div>
       </div>
 
@@ -929,7 +1099,7 @@ function PhotoSkyPage({ isMobile }: { isMobile?: boolean }) {
           fontSize: isMobile ? 14 : 11,
           color: '#6B2737',
         }}>
-          my favorite view is always you ♥
+          with you always ♥
         </div>
       </div>
 
@@ -949,7 +1119,7 @@ function PhotoSkyPage({ isMobile }: { isMobile?: boolean }) {
           fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
           fontSize: isMobile ? 12.5 : 10, lineHeight: 1.55, color: '#3A151D',
         }}>
-          "Under the warm glow of the open sky, watching you rest gracefully on the grass. The universe is infinite and wide, but my heart will always choose only you."
+          "No matter where we go, I just always want to be by your side."
         </div>
       </div>
 
@@ -992,13 +1162,13 @@ function OurJourneyPage({ isMobile }: { isMobile?: boolean }) {
           letterSpacing: 2, textTransform: 'uppercase', color: '#9E6B58',
           marginBottom: 3,
         }}>
-          ✦ Chapter VI • Hand in Hand ✦
+          ♥ Us ♥
         </div>
         <div style={{
           fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 26 : 20,
           fontWeight: 700, color: '#4A0E1C',
         }}>
-          Our Beautiful Journey
+          Every Step
         </div>
       </div>
 
@@ -1045,7 +1215,7 @@ function OurJourneyPage({ isMobile }: { isMobile?: boolean }) {
             style={{ width: '100%', height: isMobile ? 145 : 95, objectFit: 'contain', objectPosition: 'center center', display: 'block', borderRadius: 2, background: '#EEE6D6' }}
           />
           <div style={{ textAlign: 'center', fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 12 : 9.5, color: '#6B2737', marginTop: 3 }}>
-            every step ♥
+            always ♥
           </div>
         </div>
 
@@ -1073,7 +1243,7 @@ function OurJourneyPage({ isMobile }: { isMobile?: boolean }) {
           fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
           fontSize: isMobile ? 12.5 : 10, lineHeight: 1.55, color: '#3A151D',
         }}>
-          "From where we first began to where we stand today, every single chapter has been a treasure. I can't wait for all the tomorrows we get to write together."
+          "Looking back at our memories always brings a smile. Can't wait for everything ahead with you."
         </div>
       </div>
 
@@ -1087,7 +1257,21 @@ function OurJourneyPage({ isMobile }: { isMobile?: boolean }) {
   )
 }
 
-function LetterPage({ onViewNote, isMobile }: { onViewNote: () => void; isMobile?: boolean }) {
+function LetterPage({
+  onViewNote,
+  isMobile,
+  isPlaying,
+  onToggleMusic,
+  currentTime,
+  duration,
+}: {
+  onViewNote: () => void
+  isMobile?: boolean
+  isPlaying?: boolean
+  onToggleMusic?: () => void
+  currentTime?: number
+  duration?: number
+}) {
   return (
     <div style={{
       width: '100%', height: '100%',
@@ -1106,7 +1290,15 @@ function LetterPage({ onViewNote, isMobile }: { onViewNote: () => void; isMobile
         objectFit: 'contain', opacity: 0.35, zIndex: 1,
       }}/>
 
-      <div style={{ zIndex: 5 }}><AudioPill compact={!isMobile}/></div>
+      <div style={{ zIndex: 5 }}>
+        <AudioPill
+          compact={!isMobile}
+          isPlaying={isPlaying}
+          onToggle={onToggleMusic}
+          currentTime={currentTime}
+          duration={duration}
+        />
+      </div>
 
       {/* Paper card */}
       <div style={{
@@ -1130,7 +1322,7 @@ function LetterPage({ onViewNote, isMobile }: { onViewNote: () => void; isMobile
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10, marginTop: 6, paddingBottom: 8, borderBottom: '1px dashed #D4A080' }}>
           <div>
             <div style={{ fontFamily: 'Lato, sans-serif', fontSize: 8, letterSpacing: 2, color: '#8B5E3C', textTransform: 'uppercase' }}>FROM</div>
-            <div style={{ fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 16 : 13, color: '#3D0C52', marginTop: 1 }}>My Heart</div>
+            <div style={{ fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 16 : 13, color: '#3D0C52', marginTop: 1 }}>Me</div>
           </div>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontFamily: 'Lato, sans-serif', fontSize: 8, letterSpacing: 2, color: '#8B5E3C', textTransform: 'uppercase' }}>FOR</div>
@@ -1140,13 +1332,11 @@ function LetterPage({ onViewNote, isMobile }: { onViewNote: () => void; isMobile
 
         {/* Letter body */}
         <div style={{ position: 'relative', flex: 1, overflow: 'hidden' }}>
-          <p style={{ fontFamily: 'Playfair Display, serif', fontStyle: 'italic', fontSize: isMobile ? 13.5 : 11.5, lineHeight: 1.9, color: '#3D2010' }}>
-            Every moment with you feels like a page from a story I never want to end.
-            The way you smile, the sound of your laughter — these are the things I hold
-            closest to my heart. Thank you for being my greatest adventure, my safest
-            place, and my favorite person in the whole world.
+          <p style={{ fontFamily: 'Playfair Display, serif', fontStyle: 'italic', fontSize: isMobile ? 13.5 : 11.5, lineHeight: 1.85, color: '#3D2010' }}>
+            Thank you for being there with me, making me laugh, and understanding me like nobody else does.
+            I'm really lucky to have you in my life, and I appreciate every little moment we share together.
           </p>
-          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 56, background: 'linear-gradient(transparent, #FFF8F0)' }}/>
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 44, background: 'linear-gradient(transparent, #FFF8F0)' }}/>
         </div>
 
         <button onClick={onViewNote} style={{
@@ -1180,12 +1370,12 @@ function BackCoverPage({ isMobile }: { isMobile?: boolean }) {
         objectFit: 'contain', opacity: 0.55, transform: 'rotate(-7deg)',
       }}/>
       <div style={{ textAlign: 'center', color: '#F5DEB3', zIndex: 5 }}>
-        <div style={{ fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 38 : 26 }}>The End</div>
+        <div style={{ fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 38 : 26 }}>Hamro Maya</div>
         <div style={{ fontSize: isMobile ? 30 : 22, margin: '10px 0' }}>♥</div>
-        <div style={{ fontFamily: 'Playfair Display, serif', fontStyle: 'italic', fontSize: isMobile ? 14 : 11, opacity: 0.75 }}>with love, always</div>
+        <div style={{ fontFamily: 'Playfair Display, serif', fontStyle: 'italic', fontSize: isMobile ? 14 : 11, opacity: 0.75 }}>sadhai vari tmelai maya</div>
         {isMobile && (
           <div style={{ marginTop: 24, fontFamily: 'Lato, sans-serif', fontSize: 11, opacity: 0.5, letterSpacing: 1 }}>
-            — made with love, just for you ♥
+            — with love, just for you ♥
           </div>
         )}
       </div>
@@ -1217,30 +1407,30 @@ function NotePopup({ onClose }: { onClose: () => void }) {
         animation: 'slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)',
       }}>
         {/* Handle */}
-        <div style={{ width: 40, height: 4, background: '#D4A0A8', borderRadius: 2, margin: '0 auto 24px' }}/>
+        <div style={{ width: 40, height: 4, background: '#D4A080', borderRadius: 2, margin: '0 auto 24px' }}/>
 
         <div style={{ fontFamily: 'Dancing Script, cursive', fontSize: 26, color: '#6B2737', textAlign: 'center', marginBottom: 8 }}>
-          A little note for you ♥
+          Just a little note for you ♥
         </div>
         <div style={{ width: 60, height: 1.5, background: '#C9A84C', margin: '0 auto 24px', borderRadius: 1 }}/>
 
-        <div style={{ fontFamily: 'Playfair Display, serif', fontStyle: 'italic', fontSize: 15, lineHeight: 2.1, color: '#2D1A10' }}>
-          <p style={{ marginBottom: 18 }}>
-            You are the reason I believe in love stories. Every day with you is a new chapter I look forward to writing.
+        <div style={{ fontFamily: 'Playfair Display, serif', fontStyle: 'italic', fontSize: 15, lineHeight: 1.9, color: '#2D1A10' }}>
+          <p style={{ marginBottom: 16 }}>
+            I wanted to keep this real and from my heart. It's so hard to write messages these days because everything sounds like an AI wrote it, but this is truly me talking to you.
           </p>
-          <p style={{ marginBottom: 18 }}>
-            I love the way you see the world, the way you care for everyone around you, and most of all — the way you make me feel at home just by being near.
+          <p style={{ marginBottom: 16 }}>
+            Maya bashnu raixa ka ho ka bata khojna puge, samjheko ta pailai thiye tara aaile paye tmelai. Yeti dherai samaye paxi veteko xu, I really don't wanna loose you.
           </p>
-          <p style={{ marginBottom: 18 }}>
-            Thank you for every laugh, every quiet moment, and every beautiful memory. I choose you, today and always.
+          <p style={{ marginBottom: 16 }}>
+            Mero bihan pani tme, mero aandhakar ko sathiii ni tme. Na janu la xodi kaile pani, ma tmelai sadhai maya garney xu.
           </p>
           <p>
-            No matter where life takes us, my heart will always find its way back to you. You are my favorite part of every story. ♥
+            Thank you for being in my life and for every sweet moment. Let's stay together always, okay? ♥
           </p>
         </div>
 
         <div style={{ marginTop: 20, textAlign: 'right' }}>
-          <span style={{ fontFamily: 'Dancing Script, cursive', fontSize: 18, color: '#6B2737' }}>— With all my love, always ♥</span>
+          <span style={{ fontFamily: 'Dancing Script, cursive', fontSize: 18, color: '#6B2737' }}>— Hamro Maya, sadhai vari ♥</span>
         </div>
 
         {/* Hearts row */}
@@ -1265,11 +1455,21 @@ function NotePopup({ onClose }: { onClose: () => void }) {
 
 function renderPage(
   idx: number,
-  handlers: { onNext: () => void; onPrev: () => void; onViewNote: () => void },
+  handlers: {
+    onNext: () => void
+    onPrev: () => void
+    onViewNote: () => void
+    onToggleMusic: () => void
+  },
+  musicState: {
+    isPlaying: boolean
+    currentTime: number
+    duration: number
+  },
   isMobile: boolean,
 ) {
   switch (idx) {
-    case 0: return <CoverPage isMobile={isMobile}/>
+    case 0: return <CoverPage isMobile={isMobile} onStart={handlers.onToggleMusic} isPlaying={musicState.isPlaying}/>
     case 1: return <IntroCandlePage onNext={handlers.onNext} onPrev={handlers.onPrev} isMobile={isMobile}/>
     case 2: return <SpreadBLeftPage isMobile={isMobile}/>
     case 3: return <PhotoSmilePage isMobile={isMobile}/>
@@ -1277,7 +1477,16 @@ function renderPage(
     case 5: return <PhotoGardenPage isMobile={isMobile}/>
     case 6: return <PhotoSkyPage isMobile={isMobile}/>
     case 7: return <OurJourneyPage isMobile={isMobile}/>
-    case 8: return <LetterPage onViewNote={handlers.onViewNote} isMobile={isMobile}/>
+    case 8: return (
+      <LetterPage
+        onViewNote={handlers.onViewNote}
+        isMobile={isMobile}
+        isPlaying={musicState.isPlaying}
+        onToggleMusic={handlers.onToggleMusic}
+        currentTime={musicState.currentTime}
+        duration={musicState.duration}
+      />
+    )
     case 9: return <BackCoverPage isMobile={isMobile}/>
     default: return <div style={{ width: '100%', height: '100%', background: '#1C0A12' }}/>
   }
@@ -1294,15 +1503,15 @@ function MobileNavBar({
 }) {
   const pageLabels = [
     'Cover',
-    'Dedication',
-    'The Beginning',
+    'Hamro Maya',
+    'You & Me',
     'Her Smile',
-    'Prayer Flags',
+    'Quiet Peace',
     'The Garden',
     'Open Sky',
     'Our Journey',
-    'Love Letter',
-    'The End',
+    'My Letter',
+    'Hamro Maya',
   ]
   return (
     <div style={{
@@ -1385,11 +1594,40 @@ export default function App() {
   const [slideOffset, setSlideOffset] = useState(0) // mobile slide animation
   const [noteOpen, setNoteOpen] = useState(false)
 
+  // Audio State & Playback
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
+
+  const togglePlay = useCallback(() => {
+    if (!audioRef.current) return
+    if (isPlaying) {
+      audioRef.current.pause()
+      setIsPlaying(false)
+    } else {
+      audioRef.current.play().then(() => {
+        setIsPlaying(true)
+      }).catch(err => {
+        console.warn('Playback error:', err)
+      })
+    }
+  }, [isPlaying])
+
+  const ensurePlayOnInteraction = useCallback(() => {
+    if (!isPlaying && audioRef.current) {
+      audioRef.current.play().then(() => {
+        setIsPlaying(true)
+      }).catch(() => {})
+    }
+  }, [isPlaying])
+
   const touchStartX = useRef(0)
   const touchStartY = useRef(0)
 
   const goNext = useCallback(() => {
     if (animating) return
+    ensurePlayOnInteraction()
     if (isMobile) {
       if (mobilePageIdx >= TOTAL_PAGES - 1) return
       setAnimating(true)
@@ -1413,6 +1651,7 @@ export default function App() {
 
   const goPrev = useCallback(() => {
     if (animating) return
+    ensurePlayOnInteraction()
     if (isMobile) {
       if (mobilePageIdx <= 0) return
       setAnimating(true)
@@ -1434,7 +1673,8 @@ export default function App() {
     }
   }, [animating, isMobile, mobilePageIdx, spreadIdx])
 
-  const handlers = { onNext: goNext, onPrev: goPrev, onViewNote: () => setNoteOpen(true) }
+  const handlers = { onNext: goNext, onPrev: goPrev, onViewNote: () => setNoteOpen(true), onToggleMusic: togglePlay }
+  const musicState = { isPlaying, currentTime, duration }
 
   const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX
@@ -1474,6 +1714,34 @@ export default function App() {
     >
       <FloatingHearts/>
 
+      {/* Audio Element for Timilai by Purna Rai */}
+      <audio
+        ref={audioRef}
+        src={timilaiMusic}
+        loop
+        preload="auto"
+        onTimeUpdate={() => {
+          if (audioRef.current) {
+            setCurrentTime(audioRef.current.currentTime)
+          }
+        }}
+        onLoadedMetadata={() => {
+          if (audioRef.current) {
+            setDuration(audioRef.current.duration)
+          }
+        }}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+        onEnded={() => setIsPlaying(false)}
+      />
+
+      {/* Floating Music Pill */}
+      <FloatingMusicButton
+        isPlaying={isPlaying}
+        onToggle={togglePlay}
+        isMobile={isMobile}
+      />
+
       {/* ── MOBILE LAYOUT ── */}
       {isMobile ? (
         <div style={{ width: '100%', height: '100dvh', position: 'relative', overflow: 'hidden' }}>
@@ -1483,7 +1751,7 @@ export default function App() {
             transform: animating ? `translateX(${slideOffset}%)` : 'translateX(0)',
             transition: animating ? `transform ${FLIP_MS}ms cubic-bezier(0.4, 0, 0.2, 1)` : 'none',
           }}>
-            {renderPage(mobilePageIdx, handlers, true)}
+            {renderPage(mobilePageIdx, handlers, musicState, true)}
           </div>
 
           {/* Slide-in next/prev page (visual ghost) */}
@@ -1494,7 +1762,7 @@ export default function App() {
               pointerEvents: 'none',
               opacity: 0.85,
             }}>
-              {renderPage(animDir === 'fwd' ? mobilePageIdx + 1 : mobilePageIdx - 1, handlers, true)}
+              {renderPage(animDir === 'fwd' ? mobilePageIdx + 1 : mobilePageIdx - 1, handlers, musicState, true)}
             </div>
           )}
 
@@ -1525,7 +1793,7 @@ export default function App() {
           }}>
             {/* Left page */}
             <div style={{ width: pageW, height: pageH, position: 'relative', overflow: 'hidden', flexShrink: 0, boxShadow: 'inset -6px 0 12px rgba(0,0,0,0.12)' }}>
-              {renderPage(leftIdx, handlers, false)}
+              {renderPage(leftIdx, handlers, musicState, false)}
               {[1,2,3,4].map(i => (
                 <div key={i} style={{
                   position: 'absolute', top: i * 2, left: -(i * 3), bottom: 0,
@@ -1539,7 +1807,7 @@ export default function App() {
 
             {/* Right page */}
             <div style={{ width: pageW, height: pageH, position: 'relative', overflow: 'hidden', flexShrink: 0, boxShadow: 'inset 6px 0 12px rgba(0,0,0,0.08)' }}>
-              {renderPage(rightIdx, handlers, false)}
+              {renderPage(rightIdx, handlers, musicState, false)}
               {[1,2,3,4].map(i => (
                 <div key={i} style={{
                   position: 'absolute', top: i * 2, right: -(i * 3), bottom: 0,
@@ -1563,7 +1831,7 @@ export default function App() {
                 }}
               >
                 <div className="page-face">
-                  {renderPage(flipperFront, handlers, false)}
+                  {renderPage(flipperFront, handlers, musicState, false)}
                   <div style={{
                     position: 'absolute', inset: 0, pointerEvents: 'none',
                     background: animDir === 'fwd'
@@ -1580,7 +1848,7 @@ export default function App() {
                   }}/>
                 </div>
                 <div className="page-face-back">
-                  {renderPage(flipperBack, handlers, false)}
+                  {renderPage(flipperBack, handlers, musicState, false)}
                   <div style={{
                     position: 'absolute', inset: 0, pointerEvents: 'none',
                     background: animDir === 'fwd'

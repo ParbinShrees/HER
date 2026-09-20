@@ -616,7 +616,7 @@ function SpreadBLeftPage({ isMobile }: { isMobile?: boolean }) {
         />
         {/* Sweet caption badge */}
         <div style={{
-          position: 'absolute', bottom: -20, left: '50%', transform: 'translateX(-50%)',
+          position: 'absolute', bottom: -8, left: '50%', transform: 'translateX(-50%)',
           background: '#FFFDF8', border: '1px solid #D4A080',
           borderRadius: 4, padding: isMobile ? '3px 12px' : '2px 10px', whiteSpace: 'nowrap',
           zIndex: 3, boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
@@ -631,33 +631,34 @@ function SpreadBLeftPage({ isMobile }: { isMobile?: boolean }) {
         </div>
       </div>
 
-      {/* Simple Sweet Note */}
+      {/* Sweet Card */}
       <div style={{
         width: '100%', maxWidth: isMobile ? 315 : 230,
         background: 'linear-gradient(145deg, #FFFDF8, #FAF2E4)',
         border: '1.5px solid #C9A84C',
-        borderRadius: 10,
-        padding: isMobile ? '12px 16px' : '10px 12px',
+        borderRadius: 12,
+        padding: isMobile ? '12px 16px' : '10px 14px',
         boxShadow: '0 4px 14px rgba(0,0,0,0.06)',
         position: 'relative', zIndex: 4,
         textAlign: 'center',
-      }}>
-        <div style={{ fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 17 : 14.5, color: '#6B2737', fontWeight: 700, marginBottom: 4 }}>
-          Tme Ra Ma ♥
-        </div>
-        <div style={{ fontFamily: 'Lato, sans-serif', fontSize: isMobile ? 12 : 10, color: '#4A1520', lineHeight: 1.5, fontWeight: 500 }}>
-          It's only been a few months, tara tmelai vetera dherai khusi lagxa.
-        </div>
-      </div>
-
-      {/* Romantic Footer Note */}
-      <div style={{
-        zIndex: 4, textAlign: 'center',
-        padding: '2px 8px', maxWidth: isMobile ? 295 : 215,
+        marginTop: isMobile ? 6 : 4,
       }}>
         <div style={{
-          fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
-          fontSize: isMobile ? 12.5 : 10.5, color: '#5A1A26', lineHeight: 1.55, fontWeight: 600,
+          fontFamily: 'Dancing Script, cursive',
+          fontSize: isMobile ? 18 : 15,
+          color: '#6B2737',
+          fontWeight: 700,
+          marginBottom: 6,
+        }}>
+          Tme Ra Ma ♥
+        </div>
+        <div style={{
+          fontFamily: 'Playfair Display, serif',
+          fontStyle: 'italic',
+          fontSize: isMobile ? 12.5 : 10.5,
+          color: '#5A1A26',
+          lineHeight: 1.6,
+          fontWeight: 600,
         }}>
           "Mero bihan pani tme mero aandhakar ko sathiii ni tme, na janu la xodi kaile pani ma tmelai sadhai maya garney xu."
         </div>
@@ -1221,7 +1222,7 @@ function OurJourneyPage({ isMobile }: { isMobile?: boolean }) {
           fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
           fontSize: isMobile ? 12.5 : 10, lineHeight: 1.55, color: '#3A151D',
         }}>
-          "It's only been a few months, tara tmelai vetera sabai kura ramro vako xa. This is just the beginning of us."
+          "Tmelai vetera sabai kura ramro vako xa. Hamro maya sadhai yestai rahos ♥"
         </div>
       </div>
 

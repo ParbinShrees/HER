@@ -631,44 +631,22 @@ function SpreadBLeftPage({ isMobile }: { isMobile?: boolean }) {
         </div>
       </div>
 
-      {/* Keepsake Love Milestones Card */}
+      {/* Simple Sweet Note */}
       <div style={{
         width: '100%', maxWidth: isMobile ? 315 : 230,
         background: 'linear-gradient(145deg, #FFFDF8, #FAF2E4)',
         border: '1.5px solid #C9A84C',
         borderRadius: 10,
-        padding: isMobile ? '11px 16px' : '8px 12px',
+        padding: isMobile ? '12px 16px' : '10px 12px',
         boxShadow: '0 4px 14px rgba(0,0,0,0.06)',
         position: 'relative', zIndex: 4,
+        textAlign: 'center',
       }}>
-        <div style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          borderBottom: '1px dashed #D4A080', paddingBottom: 5, marginBottom: 6,
-        }}>
-          <span style={{ fontFamily: 'Lato, sans-serif', fontSize: isMobile ? 8 : 7.5, letterSpacing: 1.5, textTransform: 'uppercase', color: '#8B5E3C' }}>
-            Promise
-          </span>
-          <span style={{ fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 14 : 12.5, color: '#6B2737', fontWeight: 700 }}>
-            You & Me
-          </span>
+        <div style={{ fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 17 : 14.5, color: '#6B2737', fontWeight: 700, marginBottom: 4 }}>
+          Tme Ra Ma ♥
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: isMobile ? 8 : 6 }}>
-          <div>
-            <div style={{ fontFamily: 'Lato, sans-serif', fontSize: 7, color: '#9C7252', textTransform: 'uppercase', letterSpacing: 1 }}>Since</div>
-            <div style={{ fontFamily: 'Playfair Display, serif', fontSize: isMobile ? 11.5 : 9.5, fontWeight: 700, color: '#2B1218' }}>Day One</div>
-          </div>
-          <div>
-            <div style={{ fontFamily: 'Lato, sans-serif', fontSize: 7, color: '#9C7252', textTransform: 'uppercase', letterSpacing: 1 }}>My Heart</div>
-            <div style={{ fontFamily: 'Playfair Display, serif', fontSize: isMobile ? 11.5 : 9.5, fontWeight: 700, color: '#6B2737' }}>Only Yours</div>
-          </div>
-          <div>
-            <div style={{ fontFamily: 'Lato, sans-serif', fontSize: 7, color: '#9C7252', textTransform: 'uppercase', letterSpacing: 1 }}>Fav Place</div>
-            <div style={{ fontFamily: 'Playfair Display, serif', fontSize: isMobile ? 11.5 : 9.5, fontWeight: 700, color: '#2B1218' }}>With You</div>
-          </div>
-          <div>
-            <div style={{ fontFamily: 'Lato, sans-serif', fontSize: 7, color: '#9C7252', textTransform: 'uppercase', letterSpacing: 1 }}>Status</div>
-            <div style={{ fontFamily: 'Playfair Display, serif', fontSize: isMobile ? 11.5 : 9.5, fontWeight: 700, color: '#6B2737' }}>Always Yours ♥</div>
-          </div>
+        <div style={{ fontFamily: 'Lato, sans-serif', fontSize: isMobile ? 12 : 10, color: '#4A1520', lineHeight: 1.5, fontWeight: 500 }}>
+          It's only been a few months, tara tmelai vetera dherai khusi lagxa.
         </div>
       </div>
 
@@ -773,7 +751,7 @@ function PhotoSmilePage({ isMobile }: { isMobile?: boolean }) {
           fontSize: isMobile ? 14 : 11,
           color: '#6B2737',
         }}>
-          always smiling like this ♥
+          so cute ♥
         </div>
       </div>
 
@@ -793,7 +771,7 @@ function PhotoSmilePage({ isMobile }: { isMobile?: boolean }) {
           fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
           fontSize: isMobile ? 12.5 : 10, lineHeight: 1.55, color: '#3A151D',
         }}>
-          "Honestly, your smile and silly laughs just make everything so much better. Never stop laughing like this."
+          "Yo photo ma kasto cute dekhyeko. Tmi hasda dherai ramri dekhinxa, sadhai yestari nai hasi rakha la."
         </div>
       </div>
 
@@ -836,13 +814,13 @@ function PhotoPrayerPage({ isMobile }: { isMobile?: boolean }) {
           letterSpacing: 2, textTransform: 'uppercase', color: '#8F663F',
           marginBottom: 3,
         }}>
-          ♥ Peaceful Moments ♥
+          ♥ Prayer Flags ♥
         </div>
         <div style={{
           fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 26 : 20,
           fontWeight: 700, color: '#421620',
         }}>
-          Peace & Quiet
+          Peaceful
         </div>
       </div>
 
@@ -883,7 +861,7 @@ function PhotoPrayerPage({ isMobile }: { isMobile?: boolean }) {
           fontSize: isMobile ? 14 : 11,
           color: '#6B2737',
         }}>
-          one of my favorites ♥
+          prayer flags ♥
         </div>
       </div>
 
@@ -903,7 +881,7 @@ function PhotoPrayerPage({ isMobile }: { isMobile?: boolean }) {
           fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
           fontSize: isMobile ? 12.5 : 10, lineHeight: 1.55, color: '#3A151D',
         }}>
-          "Such a calm and pretty picture of you. Just really grateful that you're in my life."
+          "Prayer flags agadi kasto shanta dekheko. May all your prayers and wishes always come true."
         </div>
       </div>
 
@@ -1015,7 +993,7 @@ function PhotoGardenPage({ isMobile }: { isMobile?: boolean }) {
           fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
           fontSize: isMobile ? 12.5 : 10, lineHeight: 1.55, color: '#3A151D',
         }}>
-          "Quiet days with you are the best. Just being around you is enough for me."
+          "Tme sanga bolna thalepaxi din nai ramro bitxa. Really happy that you're in my life."
         </div>
       </div>
 
@@ -1099,7 +1077,7 @@ function PhotoSkyPage({ isMobile }: { isMobile?: boolean }) {
           fontSize: isMobile ? 14 : 11,
           color: '#6B2737',
         }}>
-          with you always ♥
+          with you always together ♥
         </div>
       </div>
 
@@ -1119,7 +1097,7 @@ function PhotoSkyPage({ isMobile }: { isMobile?: boolean }) {
           fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
           fontSize: isMobile ? 12.5 : 10, lineHeight: 1.55, color: '#3A151D',
         }}>
-          "No matter where we go, I just always want to be by your side."
+          "Tme jaha vayeni, you're always on my mind. Sangaai hune din chittai aawos."
         </div>
       </div>
 
@@ -1162,13 +1140,13 @@ function OurJourneyPage({ isMobile }: { isMobile?: boolean }) {
           letterSpacing: 2, textTransform: 'uppercase', color: '#9E6B58',
           marginBottom: 3,
         }}>
-          ♥ Us ♥
+          ♥ Just The Beginning ♥
         </div>
         <div style={{
           fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 26 : 20,
           fontWeight: 700, color: '#4A0E1C',
         }}>
-          Every Step
+          Hamro Katha
         </div>
       </div>
 
@@ -1195,7 +1173,7 @@ function OurJourneyPage({ isMobile }: { isMobile?: boolean }) {
             style={{ width: '100%', height: isMobile ? 145 : 95, objectFit: 'contain', objectPosition: 'center center', display: 'block', borderRadius: 2, background: '#F5EDE0' }}
           />
           <div style={{ textAlign: 'center', fontFamily: 'Dancing Script, cursive', fontSize: isMobile ? 12 : 9.5, color: '#6B2737', marginTop: 3 }}>
-            with you ♥
+            tme ra ma ♥
           </div>
         </div>
 
@@ -1243,7 +1221,7 @@ function OurJourneyPage({ isMobile }: { isMobile?: boolean }) {
           fontFamily: 'Playfair Display, serif', fontStyle: 'italic',
           fontSize: isMobile ? 12.5 : 10, lineHeight: 1.55, color: '#3A151D',
         }}>
-          "Looking back at our memories always brings a smile. Can't wait for everything ahead with you."
+          "It's only been a few months, tara tmelai vetera sabai kura ramro vako xa. This is just the beginning of us."
         </div>
       </div>
 
@@ -1333,8 +1311,9 @@ function LetterPage({
         {/* Letter body */}
         <div style={{ position: 'relative', flex: 1, overflow: 'hidden' }}>
           <p style={{ fontFamily: 'Playfair Display, serif', fontStyle: 'italic', fontSize: isMobile ? 13.5 : 11.5, lineHeight: 1.85, color: '#3D2010' }}>
-            Thank you for being there with me, making me laugh, and understanding me like nobody else does.
-            I'm really lucky to have you in my life, and I appreciate every little moment we share together.
+            It's only been a few months since we started loving each other, but having you in my life changed everything.
+            Thank you for making me smile every day and understanding me like nobody else does.
+            I'm really lucky to have you, and I want to stay by your side always.
           </p>
           <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 44, background: 'linear-gradient(transparent, #FFF8F0)' }}/>
         </div>
@@ -1416,7 +1395,7 @@ function NotePopup({ onClose }: { onClose: () => void }) {
 
         <div style={{ fontFamily: 'Playfair Display, serif', fontStyle: 'italic', fontSize: 15, lineHeight: 1.9, color: '#2D1A10' }}>
           <p style={{ marginBottom: 16 }}>
-            I wanted to keep this real and from my heart. It's so hard to write messages these days because everything sounds like an AI wrote it, but this is truly me talking to you.
+            I wanted to keep this real and from my heart. It's only been a few months since we started loving each other, so I don't want to write fake long essays or talk about old memories.
           </p>
           <p style={{ marginBottom: 16 }}>
             Maya bashnu raixa ka ho ka bata khojna puge, samjheko ta pailai thiye tara aaile paye tmelai. Yeti dherai samaye paxi veteko xu, I really don't wanna loose you.
@@ -1425,7 +1404,7 @@ function NotePopup({ onClose }: { onClose: () => void }) {
             Mero bihan pani tme, mero aandhakar ko sathiii ni tme. Na janu la xodi kaile pani, ma tmelai sadhai maya garney xu.
           </p>
           <p>
-            Thank you for being in my life and for every sweet moment. Let's stay together always, okay? ♥
+            Thank you for being in my life. This is just the beginning for us, okay? ♥
           </p>
         </div>
 
@@ -1505,11 +1484,11 @@ function MobileNavBar({
     'Cover',
     'Hamro Maya',
     'You & Me',
-    'Her Smile',
-    'Quiet Peace',
-    'The Garden',
-    'Open Sky',
-    'Our Journey',
+    'That Smile',
+    'Prayer Flags',
+    'Quiet Day',
+    'For You',
+    'New Beginning',
     'My Letter',
     'Hamro Maya',
   ]
